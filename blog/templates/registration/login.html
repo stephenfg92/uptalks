@@ -1,0 +1,56 @@
+{% extends "blog/base.html" %}
+
+{% load i18n %}
+
+{% block content %}
+
+
+<div class='container-fluid mt-3 mr-2'>
+    <div class="row justify-content-center">
+        <div class="col">
+          <h4 class='mb-5 text-center'>Entrar</h4>
+            {% if form.errors %}
+<p>Usuário e senha inválidos. Por favor, tente uma nova combinação.</p>
+{% endif %}
+        </div>
+      </div>
+<div class="row justify-content-center">
+<div class="col-sm-6 mb-4">
+<form method="post" action="{% url 'login' %}">
+  {% csrf_token %}
+  <table class='table table-borderless text-center'>
+    <tr>
+      <td>Apelido: </td>
+      <td>{{ form.username }}</td>
+    </tr>
+    <tr>
+      <td>{{ form.password.label_tag }}</td>
+      <td>{{ form.password }}</td>
+    </tr>
+    <tr>
+      <td>
+
+      </td>
+    </tr>
+  </table>
+    <div class="row justify-content-center">
+            <div class="col-3">
+              <input class="btn btn-success btn-sm btn-block" type="submit" value="Entrar" />
+              <input type="hidden" name="next" value="{{ next }}" /> 
+            </div>
+    </div>
+
+  </form>
+  </div>
+
+</div>
+  <div class="row justify-content-center">
+    <div class="col text-center">
+              É sua primeira vez utilizando o UpTalks? <a href="{% url 'django_registration_register' %}">Registre-se aqui!</a>
+    </div>
+</div>
+</form>
+
+</div>
+</div>
+{% endblock %}

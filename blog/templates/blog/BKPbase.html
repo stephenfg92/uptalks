@@ -1,0 +1,85 @@
+{% load staticfiles %}
+
+{# Load the tag library #}
+{% load bootstrap4 %}
+
+{# Load CSS #}
+{% bootstrap_css %}
+
+{# Display django.contrib.messages as Bootstrap alerts #}
+{% bootstrap_messages %}
+
+{# CCS do Font-awesome #}
+<link rel="stylesheet" href="/static/css/all.css">
+
+<!DOCTYPE html>
+<html>
+<head>
+	<title>{% block title %}{% endblock %}</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="noindex, nofollow">
+    <script src="/static/js/jquery-3.3.1.min.js"></script>
+    <script src="/static/js/vote.js"></script>
+</head>
+
+<style>
+    .navbar {
+        height: 50px;
+    }
+    #smallCaps{
+        font-variant: small-caps;
+    }
+
+</style>
+<body>
+
+
+    <nav class="navbar navbar-expandsticky-top navbar-light bg-light mb-2">
+        <a href="{% url 'blog:post_list' %}"><span id="smallCaps" class="navbar-brand mb-0 ml-4 pl-1">UpTalks</span></a>
+        <div class='row'>
+            <div class='col'>
+                {% if user.is_authenticated %}
+                    </div>
+                    <div class='col'>
+                            <small><a href="{% url 'blog:post_create' %}">novo</a></small>
+                    </div>
+                    <div class='col'>
+                        <small>|</small>
+                    </div>
+                    <div class='col'>
+                            <small><a href="{% url 'blog:post_list' %}">inicial</a></small>
+                    </div>
+                    <div class='col'>
+                        <small>|</small>
+                    </div>
+                    <div class='col'>
+                            <small><a href="{% url 'logout' %}">sair</a></small>
+                    </div>
+
+
+                {% else %}
+
+                    <a href="{% url 'login' %}">entrar</a>
+                    </div>
+                    <div class='col'>
+                        |
+                    </div>
+                    <div class='col'>
+                        <a href="{% url 'django_registration_register' %}">registrar</a>
+                    </div>
+
+
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+
+    <div id="content">
+    		{% block content %}
+    		{% endblock %}
+    </div>
+
+</body>
+</html>

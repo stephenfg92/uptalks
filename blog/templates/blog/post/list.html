@@ -1,0 +1,39 @@
+{% extends "blog/base.html" %}
+
+{% block content %}
+
+{% for post in posts %}
+<div class="container-fluid ml-2">
+<div class="row">
+    <div class="col-auto-shrink no-gutters pt-2">{{ forloop.counter }}.</div>
+    
+    <div class="col-auto-shrink no-gutters mr-0 pt-2">
+    <span 
+    class="vote-btn pl-1" 
+    data-href='{{post.get_api_vote_url}}' 
+    data-votes="{{ post.score }}">
+        <i class="far fa-arrow-alt-circle-up" {% if post.pk in voted %} style="color:#ff4619" {% else %} style="color:#adadad" {% endif %}
+        ></i>
+    </span>
+    </div>
+
+    <div class="col no-gutters pl-2">    
+    <p class="mb-0"><a href="{{ post.get_absolute_url }}">{{ post.title }}</a></p>
+    <div class="Link-detail mb-1">
+        <small class='text-muted'>
+                <span 
+                class="num" 
+                data-votes="{{ post.score }}">
+                {{ post.score }}
+                </span> 
+                votos | publicado por {% if post.status == 'anonym' %} Anônimo {% else %} {{ post.author.userprofile }} {% endif %} há {{ post.age }} | {{ post.comments.count }} comentários
+        </small>
+    </div>
+    </div>
+</div>
+</div>
+{% endfor %}
+
+{% include "pagination.html" with page=posts %}
+
+{% endblock content %}

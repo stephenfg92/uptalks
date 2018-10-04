@@ -1,0 +1,28 @@
+{% load bootstrap4 %}
+{% bootstrap_css %}
+
+<head>
+    <title>{% block title %}{% endblock %}</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="noindex, nofollow">
+    <script src="/static/js/jquery-3.3.1.min.js"></script>
+</head>
+
+{% block content %}
+<div class='container-fluid mt-3 ml- mr-2'>
+    <div class="row">
+        <div class="col pl-4 mr-2">
+        <h5 class='mb-4'>Para terminar seu cadastro, preencha também estes dados:</h5>
+<form method="post" action="">
+  {% csrf_token %}
+  {% bootstrap_form form %}
+  {# form.as_p #}
+  <input class='btn btn-primary btn-sm' type="submit" value="Finalizar">
+</form>
+</div>
+</div>
+</div>
+
+{% endblock %}

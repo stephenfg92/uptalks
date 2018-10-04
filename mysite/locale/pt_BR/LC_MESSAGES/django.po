@@ -1,0 +1,168 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# 
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2018-10-03 14:00-0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: .\blog\templates\registration\logged_out.html:4
+#: .\blog\templates\registration\password_change_done.html:6
+#: .\blog\templates\registration\password_change_form.html:7
+#: .\blog\templates\registration\password_reset_complete.html:6
+#: .\blog\templates\registration\password_reset_confirm.html:7
+#: .\blog\templates\registration\password_reset_done.html:6
+#: .\blog\templates\registration\password_reset_form.html:7
+msgid "Home"
+msgstr ""
+
+#: .\blog\templates\registration\logged_out.html:8
+msgid "Thanks for spending some quality time with the Web site today."
+msgstr ""
+
+#: .\blog\templates\registration\logged_out.html:10
+msgid "Log in again"
+msgstr ""
+
+#: .\blog\templates\registration\password_change_done.html:3
+#: .\blog\templates\registration\password_change_form.html:4
+msgid "Documentation"
+msgstr ""
+
+#: .\blog\templates\registration\password_change_done.html:3
+#: .\blog\templates\registration\password_change_form.html:4
+msgid "Change password"
+msgstr ""
+
+#: .\blog\templates\registration\password_change_done.html:3
+#: .\blog\templates\registration\password_change_form.html:4
+msgid "Log out"
+msgstr ""
+
+#: .\blog\templates\registration\password_change_done.html:7
+#: .\blog\templates\registration\password_change_form.html:8
+msgid "Password change"
+msgstr ""
+
+#: .\blog\templates\registration\password_change_done.html:14
+msgid "Your password was changed."
+msgstr ""
+
+#: .\blog\templates\registration\password_change_form.html:21
+msgid "Please correct the error below."
+msgstr ""
+
+#: .\blog\templates\registration\password_change_form.html:21
+msgid "Please correct the errors below."
+msgstr ""
+
+#: .\blog\templates\registration\password_change_form.html:26
+msgid ""
+"Please enter your old password, for security's sake, and then enter your new "
+"password twice so we can verify you typed it in correctly."
+msgstr ""
+
+#: .\blog\templates\registration\password_change_form.html:54
+#: .\blog\templates\registration\password_reset_confirm.html:32
+msgid "Change my password"
+msgstr ""
+
+#: .\blog\templates\registration\password_reset_complete.html:7
+#: .\blog\templates\registration\password_reset_done.html:7
+#: .\blog\templates\registration\password_reset_form.html:8
+msgid "Password reset"
+msgstr ""
+
+#: .\blog\templates\registration\password_reset_complete.html:16
+msgid "Your password has been set.  You may go ahead and log in now."
+msgstr ""
+
+#: .\blog\templates\registration\password_reset_complete.html:18
+msgid "Log in"
+msgstr ""
+
+#: .\blog\templates\registration\password_reset_confirm.html:8
+msgid "Password reset confirmation"
+msgstr ""
+
+#: .\blog\templates\registration\password_reset_confirm.html:18
+msgid ""
+"Please enter your new password twice so we can verify you typed it in "
+"correctly."
+msgstr ""
+
+#: .\blog\templates\registration\password_reset_confirm.html:24
+msgid "New password:"
+msgstr ""
+
+#: .\blog\templates\registration\password_reset_confirm.html:29
+msgid "Confirm password:"
+msgstr ""
+
+#: .\blog\templates\registration\password_reset_confirm.html:38
+msgid ""
+"The password reset link was invalid, possibly because it has already been "
+"used.  Please request a new password reset."
+msgstr ""
+
+#: .\blog\templates\registration\password_reset_done.html:15
+msgid ""
+"We've emailed you instructions for setting your password, if an account "
+"exists with the email you entered. You should receive them shortly."
+msgstr ""
+
+#: .\blog\templates\registration\password_reset_done.html:17
+msgid ""
+"If you don't receive an email, please make sure you've entered the address "
+"you registered with, and check your spam folder."
+msgstr ""
+
+#: .\blog\templates\registration\password_reset_email.html:2
+#, python-format
+msgid ""
+"You're receiving this email because you requested a password reset for your "
+"user account at %(site_name)s."
+msgstr ""
+
+#: .\blog\templates\registration\password_reset_email.html:4
+msgid "Please go to the following page and choose a new password:"
+msgstr ""
+
+#: .\blog\templates\registration\password_reset_email.html:8
+msgid "Your username, in case you've forgotten:"
+msgstr ""
+
+#: .\blog\templates\registration\password_reset_email.html:10
+msgid "Thanks for using our site!"
+msgstr ""
+
+#: .\blog\templates\registration\password_reset_email.html:12
+#, python-format
+msgid "The %(site_name)s team"
+msgstr ""
+
+#: .\blog\templates\registration\password_reset_form.html:16
+msgid ""
+"Forgotten your password? Enter your email address below, and we'll email "
+"instructions for setting a new one."
+msgstr ""
+
+#: .\blog\templates\registration\password_reset_form.html:22
+msgid "Email address:"
+msgstr ""
+
+#: .\blog\templates\registration\password_reset_form.html:25
+msgid "Reset my password"
+msgstr ""

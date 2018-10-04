@@ -1,0 +1,225 @@
+Changelog 02/10:
+
+    Agora o  Django utiliza arquivos de localidade em língua portuguesa:
+        - adição do middleware 'django.middleware.locale.LocaleMiddleware';
+        - Adicionadas linhas em settings.py: 
+            LANGUAGES = (('pt-br', u'Português'),)
+            LOCALE_PATHS = (PROJECT_DIR.child('locale'),)
+            LANGUAGE_CODE = 'pt-br'
+        - Após criação de symlink entre os arquivos de localidade do django-registration e a raíz de mysite, utilizado o comando: python manage.py makemessages -s -a -l pt_BR
+
+    UI de login melhorada
+
+    Ícone de votação alterado
+    
+
+
+Changelog 28/09:
+    
+    - Database migrado para o PostgreSQL. SEMPRE REALIZE AS MIGRAÇÕES UMA DE CADA VEZ!
+
+Changelog 26/09:
+
+    Fiz alguma besteira e perdi os logs
+    Anyways, fiz tudo que o TODO mandava.
+
+    A adição mais recente foi a votação dinâmica com ajax. Deu o maior trampo. Fiquei o dia inteiro fazendo essa merda.
+
+    - Enfim, post_detail e post_list recebem no contexto a lista dos posts votados pelo usuário atualmente autenticado.
+
+    - implementada view VoteAPIView
+
+    - implementado vote.js, na pasta de arquivos estáticos do django
+
+    - templates modificados para comportar vote.js
+
+Changelog 21/09:
+
+    - Userprofile retorna o nome completo adquirido no cadastro
+    - Posts identificados agora pelo nome completo do poster. Foi bem fácil de acessar, depois de algum tempo explorando o django shell: post.author.userprofile no template
+    - Removido método get_context_data na classe post_list(ListView)
+    - post_detail agora é um view baseado em classe
+
+    TODO:
+        - Comment na mesma página do post. Use isso: https://stackoverflow.com/questions/45659986/django-implementing-a-form-within-a-generic-detailview?rq=1
+        - Votação com AJAX
+        - Servir localmente aquivos do bootstrap e font-awesome
+        - Permitir que usários postem anônimamente
+        - Falha de segurança: qualquer usuário pode editar o perfil de qualquer usuário
+        - logout deve redirecionar para a página de login
+
+
+Changelog 19/09:
+
+    -Registro de usuário bem sucedido agora redireciona para a página de perfil de usuário, onde o mesmo deverá preencher informações extras. Mudança feita em mysite/urls.py
+
+    -Adicionado método get_context_data na classe post_list(ListvView)
+
+    -Post_list agora é um view baseado em classe
+
+    TODO:
+        - Nome completo, conforme preenchido na pg do perfil, deve ser o identificador do post ao invés do nome de usuário
+        - Votação com AJAX
+        - Servir localmente aquivos do bootstrap e font-awesome
+        - Permitir que usários postem anônimamente
+        - Falha de segurança: qualquer usuário pode editar o perfil de qualquer usuário
+        - logout deve redirecionar para a página de login
+
+Changelog 18/09:
+
+    - Instalação do plugin que integra o Django ao bootstrap4
+
+    - Início dos trabalhos com a interface
+
+    TODO:
+    - Servir todos CSSs, scripts e qualquer outra coisa do bootstrap e do font-awesome à partir de um servidor próprio
+
+Changelog 17/09:
+
+    - Sistema de upvotes atualizado com a implementação encontrada em: https://github.com/iKenshu/hnews
+
+    - Misturei a implementação antiga com a nova, de modo que cada usuário só pode realizar agora um upvote por post:
+        - Adicionado model Vote
+        - Em VoteView, o algorítmo agora checa se já houveram votos do usuário no post selecionado.
+        - Adicionada tabela de votos no painel de administração do django
+        - Return alterado para return redirect(request.META.get('HTTP_REFERER', 'blog:post_list')) , permitindo que, após o voto, 
+        o usuário seja redirecionado para mesma página em que estava
+
+    - Implementação de ranking separado do score, para fins de decidir a ordem dos posts:
+        -Manager dos posts mudou de:
+            return super(VoteManager, self).get_queryset().filter(status='published').annotate(votes=Count('score')).order_by('-votes')
+        Para:
+            return super(VoteManager, self).get_queryset().filter(status='published').order_by('-rank', '-score')
+        - No model Post, implementado método set_rank(), de acordo com este post: https://arunrocks.com/building-a-hacker-news-clone-in-django-part-4/ e este link: https://medium.com/hacking-and-gonzo/how-hacker-news-ranking-algorithm-works-1d9b0cf2c08d
+        - Adicionado app Django-extensions, que me permite rodar o script rerank.py (mysite/scripts) com o comando: python manage.py runscript rerank. Este script atualiza o ranking dos posts.
+        - Para automatizar, use o Cron (https://www.reddit.com/r/django/comments/5c8myk/need_a_script_to_run_every_hour_stressed_need_help/d9v3bty)
+
+Changelog 14/09:
+
+    - Comentários adicionados ao template de detalhes do post
+
+    - Botão de cancelamento de exlusão de post funcionando:
+        - O botão estava gerando esse erro: '__proxy__' object has no attribute 'get'
+            - Isso ocorreu porque o view deveria retornar um objeto response ao invés de apenas um reverse lazy
+            Portanto, substituí isso:
+                return reverse_lazy('blog:post_detail', kwargs={'slug': self.kwargs['slug']})
+            Por isso:
+                return HttpResponseRedirect(reverse_lazy('blog:post_detail', kwargs={'slug': self.kwargs['slug']}))
+
+    - Adicionando botão de upvote:
+        - Adicionado VoteForm em forms.py
+        - Adicionado VoteFormView emm views.py
+
+
+Changelog 13/09:
+
+ - Links para edição e exlusão de posts funcionando:
+    - Atualizado, em views.py as classes PostUpdateView e PostDeleteView.
+
+    - Atualizadas as urls para update e delete para incluir o método path() e utilizar síntaxe que não exige regex.
+
+    - O template detail.html passa como argumento o slug do post, para permitir o uso dos links de deletar e atualizar post -> {% url 'blog:post_update' slug=post.slug %}
+
+    - Usei como referência este repositório: https://github.com/iKenshu/hnews e esse post: https://wellfire.co/learn/fast-and-beautiful-urls-with-django/
+
+Changelog 12/09:
+
+TODO:
+
+    Arrumar links para edição de post
+
+- Problema 1 resolvido:
+    - método get_object em UserProfileEditView (views.py) retornava um tuple.
+    A solução foi escolher o primeiro elemento deste tuple desta maneira -> instance[0]
+
+    - Em forms.py, método UserProfileForm a sintaxe para exclusão de campos estava desatualizada.
+
+- Adicionado método para criação de posts
+    - Criada classe PostForm em forms.py
+    - Criada classe PostCreatreView em views.py, de acordo com a documentação do django: https://docs.djangoproject.com/en/2.1/topics/class-based-views/generic-editing/
+    - template fica em blog/templates/blog
+    - adicionada url relevante em blog/urls.py, com o decorador auth(), para exigir login.
+    - Obs.: A implementação original (https://arunrocks.com/building-a-hacker-news-clone-in-django-part-3/) não estava funcionando.
+
+- Adicionado método para edição e exlusão de posts
+    - Se eu acessar o link diretamente, a edição funciona,
+    mas ao tentar linkar através da propriedade 'name' da url, ganho um erro
+    NoReverseMatch
+
+- Adicionado sistema de comentários conforme https://django-contrib-comments.readthedocs.io/en/latest/
+
+
+-------------------------------------
+TODO:
+
+Problema 1: Arrumar a página de edição de perfil
+
+
+Change Log 11/09/2018:
+
+- Gerando slugs únicos de acordo com o método deste website: https://fazle.me/auto-generating-unique-slug-django-generic-approach/
+
+- Removido da linha prepopulated_fields = {'slug': ('title',)} do arquivo admin.py
+
+- Adicionado sistema de upvotes e downvotes de acordo com: https://arunrocks.com/building-a-hacker-news-clone-in-django-part-1/:
+
+    -Adicionado campo 'score' na classe Post em models.py
+
+    -Adicionada classe Vote a models.py
+
+    -Adicionada clase VoteAdmin a admin.py
+
+    -Adicionada clase Vote a models.py
+
+    -Criado ModelManager chamado VoteManager que retorna posts Published e ordenados por número de votos.
+
+    -Em views.py, post_list passa a adquirir objetos usando o model manager acima -> object_list = Post.with_votes.all()
+
+    -Implementação testada com o seguinte script:
+
+        >>> from blog.models import Post, Vote
+        >>> from django.contrib.auth.models import User
+        >>> a = User.objects.all()[0]
+        >>> for i in range(10): Vote(post=Post.objects.order_by('?')[0],voter=a).save()
+
+    -Para verificar a ordem dos posts, use o seguinte script no shell:
+
+        >>> from blog.models import Post, Vote
+        >>> from django.db.models import Count
+        >>> q = Post.objects.filter(status='published').annotate(votes=Count('vote')).order_by('-votes')
+        >>> q
+
+
+- Adicionado sistema de autenticação:
+
+    - Url de login e logout adicionadas a mysite/urls.py de acordo com a documentação do django e o tutorial abaixo:
+        https://docs.djangoproject.com/en/2.1/topics/auth/default/#django.contrib.auth.views.LoginView,
+        https://wsvincent.com/django-user-authentication-tutorial-login-and-logout/
+
+    - Inclusão de opções de login e logout no template base.html
+
+    - Inclusão de redirecionamentos de login e logout em settings.py
+
+    - O template de login fica em C:\Users\steph\Dev\mysite\mysite\blog\templates\registration
+    estão inclusos também outros templates ofericidos pelo próprio Django.
+
+- Adicionado sistema de registro de usuários, de acordo com as instruções do package Django-Registration: https://django-registration.readthedocs.io/en/3.0/quickstart.html#quickstart
+
+    - a url de acesso é: accounts/register/
+    
+    - Template de registro usado disponível aqui: https://arunrocks.com/building-a-hacker-news-clone-in-django-part-2/
+
+    - O Template está localizado na pasta 
+        C:\Users\steph\Dev\mysite\mysite\blog\templates\django_registration
+
+    - Url de registro nomeada em mysite/urls.py conforme: https://django-registration.readthedocs.io/en/3.0/quickstart.html#default-form-template
+
+- Adicionados perfis de usuários, confome https://arunrocks.com/building-a-hacker-news-clone-in-django-part-2/
+
+    -Adicionada classe UserProfileEditView() em views.py
+
+    -Criado arquivo blog/forms.py
+
+    -Adicionada url para tal em mysite/urls.py
+
+    -Template fica em: C:\Users\steph\Dev\mysite\mysite\blog\templates\edit_profile.html

@@ -1,0 +1,12 @@
+{% extends "blog/base.html" %}
+
+{% block content %}
+<div class='container mt-3'>
+    <form action="" method="POST">
+        {% csrf_token %}
+        <p class="alert alert-danger">Tem certeza de que quer excluir {{ post.title }}?</p>
+        <input type="submit" class="btn btn-light" value="Sim">
+        <input type="submit" class="btn btn-danger" value="Cancelar" name="cancel">
+    </form>
+</div>
+{% endblock content %}

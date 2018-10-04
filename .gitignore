@@ -102,3 +102,12 @@ venv.bak/
 
 # mypy
 .mypy_cache/
+
+# Text backup files
+*.bak
+
+# Database
+*.sqlite3
+
+#Sensitive Info.
+mysite/settings_secret.py
