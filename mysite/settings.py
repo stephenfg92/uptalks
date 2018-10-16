@@ -26,9 +26,9 @@ PROJECT_DIR = Path(__file__).parent
 SECRET_KEY = secret_key_string
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = debug_mode
 
-ALLOWED_HOSTS = ['192.168.1.7', '192.168.1.6:8000', '127.0.0.1', '127.0.0.1:8000', 'localhost', '192.168.43.73:80', '192.168.43.73', '104.248.237.9']
+ALLOWED_HOSTS = ['192.168.1.8', '192.168.1.6:8000', '127.0.0.1', '127.0.0.1:8000', 'localhost', '192.168.43.73:80', '192.168.43.73', '104.248.237.9']
 
 
 # Application definition
@@ -54,7 +54,6 @@ MIDDLEWARE = (
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
-    #'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.security.SecurityMiddleware',
@@ -89,10 +88,10 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'uptalks',
-        'USER': 'postgres',
+        'USER': 'uptalker',
         'PASSWORD': sql_pass_string,
         'HOST': 'localhost',
-        'PORT': '5432',
+        'PORT': '',
     }
 }
 

@@ -8,8 +8,21 @@ from django.conf.urls.static import static
 from django_registration.backends.one_step.views import RegistrationView
 from django.urls import reverse_lazy
 
+from django.views.generic import TemplateView
+
+from django.views.decorators.cache import never_cache
+
+
 urlpatterns = [
     path('admin/', admin.site.urls),
+    #path('service-worker.js', cache_control(max_age=2592000)(TemplateView.as_view(
+    #template_name="service-worker.js",
+    #content_type='application/javascript',
+#)), name='service-worker.js'),
+    path('service-worker.js', never_cache((TemplateView.as_view(
+        template_name="service-worker.js",
+        content_type='application/javascript',
+        ))), name='service-worker.js'),
     path('', include('blog.urls', namespace='blog')),
     path('accounts/', include('django.contrib.auth.urls')),
     path('accounts/', include('django_registration.backends.one_step.urls')),

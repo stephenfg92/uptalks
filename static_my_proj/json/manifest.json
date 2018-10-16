@@ -1,0 +1,22 @@
+{
+	"name": "UpTalks",
+	"short_name": "UpTalks",
+	"description": "A plataforma online do edifício Duplex Up Style",
+	"icons": [
+		{
+			"src": "/static/images/icon-sm.png",
+			"type": "image/png",
+			"sizes": "96x96"
+		},
+		{
+			"src": "/static/images/icon-lg.png",
+			"type": "image/png",
+			"sizes": "192x192"
+		}
+	],
+	"start_url": "",
+	"display": "standalone",
+	"background_color": "#FFFFFF",
+	"theme_color": "#FFFFFF",
+	"scope": "/"
+}

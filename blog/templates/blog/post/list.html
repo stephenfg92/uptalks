@@ -1,8 +1,10 @@
 {% extends "blog/base.html" %}
 
+
 {% block content %}
 
 {% for post in posts %}
+
 <div class="container-fluid ml-2">
 <div class="row">
     <div class="col-auto-shrink no-gutters pt-2">{{ forloop.counter }}.</div>

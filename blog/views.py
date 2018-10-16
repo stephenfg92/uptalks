@@ -28,6 +28,9 @@ from django.db.models import Count
 
 import json
 
+#Imports para viabilizar utilização de PWAs
+from django.template.loader import get_template
+
 class post_list(LoginRequiredMixin ,ListView): 
 	login_url = 'login'
 	redirect_field_name = 'redirect_to'
@@ -220,3 +223,10 @@ class VoteAPIView(APIView):
 			"count": post.score
 		}
 		return Response(data)
+
+#Entrega o service-worker ao navegador
+def serviceworker(request, js):
+	template = get_template('service-worker.js')
+	html = template.render()
+	html['Cache-Control'] = 'max-age=0'
+	return HttpResponse(html, content_type="application/x-javascript")

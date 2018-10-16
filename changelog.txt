@@ -1,3 +1,17 @@
+changelog 16/10
+
+    Viabilicando Service Worker:
+        -Incluído main.js em base.html
+        -Adicionado método serviceworker em views.py
+        -Adicionada path para o service worker em urls.py
+        -Criado arquivo service-worker.js em templates de acordo com: https://developers.google.com/web/ilt/pwa/caching-files-with-service-worker (Network falling back to cache)
+
+Changelog 14/10:
+
+    Incluído manifest.json
+    Incluído service-worker.json
+    SSL incluído no servidor do Uptalks: https://www.digitalocean.com/community/tutorials/how-to-secure-nginx-with-let-s-encrypt-on-ubuntu-18-04
+
 Changelog 02/10:
 
     Agora o  Django utiliza arquivos de localidade em língua portuguesa:

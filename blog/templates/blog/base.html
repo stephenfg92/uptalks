@@ -1,5 +1,8 @@
 {% load staticfiles %}
 
+{# Load pwa related content #}
+{# load pwa #}
+
 {# Load the tag library #}
 {% load bootstrap4 %}
 
@@ -11,6 +14,7 @@
 
 {# CCS do Font-awesome #}
 <link rel="stylesheet" href="/static/css/all.css">
+<link rel="manifest" href="/static/json/manifest.json">
 
 <!DOCTYPE html>
 <html>
@@ -20,8 +24,13 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="robots" content="noindex, nofollow">
+
+    <!-- Registra o service worker -->
+<script src="/static/js/main.js"></script>
+
     <script src="/static/js/jquery-3.3.1.min.js"></script>
     <script src="/static/js/vote.js"></script>
+
 </head>
 
 <style>

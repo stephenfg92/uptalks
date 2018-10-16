@@ -4,6 +4,8 @@ from . import views
 from django.contrib.auth.views import LoginView, logout_then_login
 from django.contrib.auth.decorators import login_required as auth
 
+from django.views.decorators.cache import never_cache
+
 app_name='blog'
 urlpatterns = [
     #post views
