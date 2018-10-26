@@ -1,3 +1,31 @@
+changelog 26/10:
+    Realizei algumas melhorias na interface de votações.
+    Número de votos agora está salvo na propriedade question.votes
+
+    TODO:
+        Se o usuário não houver votado na votação atual, é possível redirecioná-lo da tela de login para a tela de votação?
+
+        Enviar notificações em caso de novas votações (https://developers.google.com/web/ilt/pwa/introduction-to-push-notifications)
+
+        Resolver problema no ServiceWorker: The FetchEvent for "https://uptalks.com.br/..." resulted in a network error response: an object that was not a Response was passed to respondWith().
+
+Changelog 25/10:
+    Construída a interface para as votações.
+    Contagem de votos realizada através de queryset em post_list.
+    Contegem de votos em detail.html e results.html realizada através do filtro de template add.
+
+    TODO:
+        Buscar maneiras mais inteligentes de contar os valores dos votos. É possível atrelar a contagem de votos diretamente ao campo 'score' de Question?
+
+        Se o usuário não houver votado na votação atual, é possível redirecioná-lo da tela de login para a tela de votação?
+
+        Enviar notificações em caso de novas votações (https://developers.google.com/web/ilt/pwa/introduction-to-push-notifications)
+
+        Resolver problema no ServiceWorker: The FetchEvent for "https://uptalks.com.br/..." resulted in a network error response: an object that was not a Response was passed to respondWith().
+
+Changelog 24-10
+    Adicionados modeols Question, Choices e PollVote, com suas respectivas URLs e Views
+
 changelog 16/10
 
     Viabilicando Service Worker:

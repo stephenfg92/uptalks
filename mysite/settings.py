@@ -28,7 +28,7 @@ SECRET_KEY = secret_key_string
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = debug_mode
 
-ALLOWED_HOSTS = ['192.168.1.8', '192.168.1.6:8000', '127.0.0.1', '127.0.0.1:8000', 'localhost', '192.168.43.73:80', '192.168.43.73', '104.248.237.9']
+ALLOWED_HOSTS = secret_hosts
 
 
 # Application definition

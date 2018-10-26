@@ -1,0 +1,45 @@
+{% extends "blog/base.html" %}
+{% load bootstrap4 %}
+
+{% block content %}
+
+<div class='container-fluid mt-3 ml-2'>
+
+        <div class='row'>
+        <div class="col-auto-shrink no-gutters mr-0 pt-2">
+        <span 
+        class="vote-btn pl-1">
+            <i class="fas fa-star" style="color:#00c91a"></i>
+        </span>
+        </div>
+            <div class="col no-gutters pl-2">
+            <h4>{{ question.title }}</h4>
+                <small><p class="text-muted"><span class="num">{{ question.score }}</span> votos | publicado por {{ question.author.userprofile }} há {{ question.age }} | comentários desabilitados</p></small>
+            </div>
+        </div>
+
+            <div class=row>
+                <div class="col pl-4">
+                    <p class='text-justify'>{{ question.question_text |linebreaks }}</p>
+                </div>
+            </div>
+
+        <div class="row">
+
+        <div class="col p-4">
+            {% for choice in question.choice_set.all %}
+        	<div class="input-group">
+        		<div class="input-group-prepend mb-3">
+                            <div class="card" style="width:2.4rem; background-color:#E9ECEF">
+                                <div class="card-body"></div>
+                            </div>
+                            <div class="card" style="width:18rem">
+                                <div class="card-body">Opção {{forloop.counter}}: {{ choice.choice_text }} - {{ choice.votes}} votos</div>
+                            </div>
+				</div>
+				{% endfor %}
+			</div>
+				<a href="{% url 'blog:poll_vote' question.pk %}">Clique aqui para voltar a votação.</a>
+        </div>
+        </div>
+{% endblock %}

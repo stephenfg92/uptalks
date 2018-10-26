@@ -13,8 +13,10 @@ urlpatterns = [
     path('<slug:slug>/', views.post_detail.as_view(), name='post_detail'),
     path('update/<slug:slug>/', auth(views.PostUpdateView.as_view()), name='post_update'),
     path('delete/<slug:slug>/', auth(views.PostDeleteView.as_view()), name='post_delete'),
-    path('vote/<slug:slug>/', auth(views.VoteView.as_view()), name='post_vote'),
     path('api/vote/<slug:slug>/', auth(views.VoteAPIView.as_view()), name='post_api_vote'),
+    path('poll/<int:pk>/', auth(views.PollDetail.as_view()), name='poll_detail'),
+    path('poll/<int:pk>/results', auth(views.PollResults.as_view()), name='poll_results'),
+    path('poll/<int:question_id>/vote', auth(views.poll_vote), name='poll_vote'),
     url(r'fetch', views.fetch_posts, name='fetch_posts'),
     url(r'create', auth(views.PostCreateView.as_view()), name='post_create')
 ]

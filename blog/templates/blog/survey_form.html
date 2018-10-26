@@ -1,0 +1,21 @@
+{% extends "blog/base.html" %}
+{% load bootstrap4 %}
+
+
+
+{% block title %}{{ post.title }}{% endblock %}
+
+{% block content %}
+    <div class='container-fluid mt-3 ml-2'>
+        <div class="row">
+
+        <div class="col p-4">
+                    <form method="POST">
+                        {% csrf_token %}
+                        {# bootstrap_form form size='small' #}
+                        {{ form }}
+                        <button type="submit" class="save btn btn-primary btn-sm">Publicar</button>
+                    </form>
+        </div>
+        </div>
+{% endblock %}

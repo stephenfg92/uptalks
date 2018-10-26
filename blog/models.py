@@ -68,6 +68,9 @@ class Post(models.Model):
 	def __str__(self):
 		return self.title
 
+	def postOrVote(self):
+		return 'post'
+
 class Vote(models.Model):
 	voter = models.ForeignKey(User, on_delete=models.CASCADE)
 	post = models.ForeignKey(Post, on_delete=models.CASCADE)
@@ -116,3 +119,53 @@ class Comment(models.Model):
 
 	def __str__(self):
 		return self.text
+
+#Surveys
+
+class Question(models.Model):
+	question_text = models.TextField(max_length=1000)
+	publish = models.DateTimeField(default=timezone.now)
+	STATUS_CHOICES = (('hidden', 'Oculto'), ('public', 'Público'))
+	status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='public')
+
+	#Campos necessários para integração com view post_list
+	title = models.CharField(max_length=250)
+	author = models.ForeignKey(User, related_name='question', on_delete=models.CASCADE, max_length=250)
+	score = models.IntegerField(default=0)
+	rank = models.FloatField(default=100)
+
+	with_votes = VoteManager()
+
+	def age(self):
+		t = ((timezone.now()-self.publish).total_seconds())
+		if t > 86400:
+			return "{} dias".format("%.0f" % (t / 86400))
+		elif t < 3600:
+			return "{} minutos".format("%.0f" % (t / 60))
+		elif t > 3600:
+			return "{} horas".format("%.0f" % (t / 3600))
+
+	def get_absolute_url(self):
+		return reverse('blog:poll_detail', kwargs={'pk': self.pk})
+
+	def __str__(self):
+		return self.question_text
+
+class Choice(models.Model):
+	question = models.ForeignKey(Question, on_delete=models.CASCADE)
+	choice_text = models.CharField(max_length=200)
+	votes = models.IntegerField(default=0)
+
+	def __str__(self):
+		return self.choice_text
+
+	def postOrVote(self):
+		return 'vote'
+
+class PollVote(models.Model):
+	voter = models.ForeignKey(User, on_delete=models.CASCADE)
+	question = models.ForeignKey(Question, on_delete=models.CASCADE)
+	choice = models.CharField(max_length=200)
+
+	def __str__(self):
+		return self.voter.username + ' voted on ' + self.question.question_text + ' at option ' + self.choice 

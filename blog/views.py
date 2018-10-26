@@ -11,7 +11,7 @@ from django.http import HttpResponseRedirect
 from django_registration.backends.one_step.views import RegistrationView
 from django.views.generic import ListView
 
-from .models import UserProfile, Post, Vote, Comment
+from .models import UserProfile, Post, Vote, Comment, Question, Choice, PollVote
 
 from .forms import UserProfileForm, PostForm, VoteForm, CommentForm
 
@@ -28,41 +28,53 @@ from django.db.models import Count
 
 import json
 
+from itertools import chain
+
 #Imports para viabilizar utilização de PWAs
 from django.template.loader import get_template
 
-class post_list(LoginRequiredMixin ,ListView): 
-	login_url = 'login'
-	redirect_field_name = 'redirect_to'
-	context_object_name = 'posts'
-	template_name = 'blog/post/list.html'
-	paginate_by = 10
+class post_list(LoginRequiredMixin, ListView): 
+    login_url = 'login'
+    redirect_field_name = 'redirect_to'
+    context_object_name = 'posts'
+    template_name = 'blog/post/list.html'
+    paginate_by = 10
+    
+    def get_context_data(self, **kwargs):
+        context = super(post_list, self).get_context_data(**kwargs)
+        voted = Vote.objects.all().filter(voter=self.request.user)
+        posts_in_page = [post.id for post in context["object_list"]]
+        voted = voted.filter(post_id__in=posts_in_page)
+        voted = voted.values_list("post_id", flat=True)
+        context["voted"] = voted
 
-	'''
-	def dispatch(self, request, *args, **kwargs):
-		if not self.request.user.is_authenticated:
-			return redirect('login')
-	'''
+        try:
+            q = Question.with_votes.all().filter(status='public')
+            choices = Choice.objects.all().filter(question=q[0].id)
+            numvotes = 0
 
-	def get_context_data(self, **kwargs):
-		context = super(post_list, self).get_context_data(**kwargs)
-		voted = Vote.objects.all().filter(voter=self.request.user)
-		posts_in_page = [post.id for post in context["object_list"]]
-		voted = voted.filter(post_id__in=posts_in_page)
-		voted = voted.values_list("post_id", flat=True)
-		context["voted"] = voted
-		return context
+            for i in choices:
+                numvotes += i.votes
 
-	def get_queryset(self, *args, **kwargs):
-		#qs = Post.with_votes.all()
-		qs = Post.with_votes.all().annotate(comment_count=Count('comments'))
-		query = self.request.GET.get('q', None)
-		if query:
-			qs = qs.filter(
-				Q(title__icontains=query) |
-				Q(user__username__icontains=query)
-			)
-		return qs
+            context["numvotes"] = numvotes
+        except:
+            print('fail')
+            pass
+
+        return context
+
+    def get_queryset(self, *args, **kwargs):
+        #qs = Post.with_votes.all().annotate(comment_count=Count('comments'))
+        q1 = Question.with_votes.all().filter(status='public')
+        q2 = Post.with_votes.all()
+        qs = list(chain(q1, q2))
+        query = self.request.GET.get('q', None)
+        if query:
+            qs = qs.filter(
+                Q(title__icontains=query) |
+                Q(user__username__icontains=query)
+            )
+        return qs
 
 #É por aqui que o aplicativo android irá adquirir os posts publicados
 @api_view(['get'])
@@ -165,30 +177,6 @@ class PostDeleteView(DeleteView):
 		else:
 			return super(PostDeleteView, self).post(request, *args, **kwargs)
 
-class VoteView(RedirectView):
-
-	def get(self, request, *args, **kwargs):
-		slug = self.kwargs['slug']
-		user = self.request.user
-		post = get_object_or_404(Post, slug=slug)
-
-		#Checa se já houve voto
-		prev_votes = Vote.objects.filter(voter=user, post=post)
-		has_voted = (prev_votes.count() > 0)
-
-		if user.is_authenticated:
-			if not has_voted:
-				post.score = post.score + 1
-				Vote.objects.create(voter=user, post=post)
-				post.save()
-				return redirect(request.META.get('HTTP_REFERER', 'blog:post_list'))
-			else:
-				prev_votes[0].delete()
-				post.score = post.score - 1
-				post.save()
-				return redirect(request.META.get('HTTP_REFERER', 'blog:post_list'))
-		return redirect('login')
-
 class VoteAPIView(APIView):
 
 	authentication_classes = (authentication.SessionAuthentication,)
@@ -230,3 +218,49 @@ def serviceworker(request, js):
 	html = template.render()
 	html['Cache-Control'] = 'max-age=0'
 	return HttpResponse(html, content_type="application/x-javascript")
+
+#Polls
+class PollDetail(DetailView):
+	model = Question
+	template_name = 'blog/polls/detail.html'
+
+class PollResults(DetailView):
+    model = Question
+    template_name = 'blog/polls/results.html'
+    
+
+def poll_vote(request, question_id):
+    question = get_object_or_404(Question, pk=question_id)
+    user = request.user
+
+    prev_votes = PollVote.objects.filter(voter=user, question=question)
+    has_voted = (prev_votes.count() > 0)
+
+    if user.is_authenticated:
+        try:
+            selected_choice = question.choice_set.get(pk=request.POST['choice'])
+        except (KeyError, Choice.DoesNotExist):
+            # Redisplay the question voting form.
+            return render(request, 'blog/polls/detail.html', {
+                'question': question,
+                'error_message': "Você ainda não escolheu uma opção.",
+            })
+        else:
+            if not has_voted:
+                PollVote.objects.create(voter=user, question=question, choice=selected_choice)
+                selected_choice.votes += 1
+                question.score += 1
+                question.save()
+                selected_choice.save()
+                # Always return an HttpResponseRedirect after successfully dealing
+                # with POST data. This prevents data from being posted twice if a
+                # user hits the Back button.
+                return HttpResponseRedirect(reverse('blog:poll_results', args=(question.id,)))
+            else:
+                #return redirect(request.META.get('HTTP_REFERER', 'blog:poll_results', args=(question.id)))
+                #return HttpResponseRedirect(reverse('blog:poll_results', args=(question.id,)))
+                return render(request, 'blog/polls/detail.html', {
+                'question': question,
+                'error_message': "Você já possui um voto registrado.",
+            })
+    return redirect('login')

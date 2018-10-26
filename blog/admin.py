@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Post, UserProfile, Vote, Comment
+from .models import Post, UserProfile, Vote, Comment, Question, Choice, PollVote
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth import get_user_model
 
@@ -13,6 +13,22 @@ class PostAdmin(admin.ModelAdmin):
     ordering = ['status', 'publish']
 
 admin.site.register(Post, PostAdmin)
+
+class ChoiceInline(admin.TabularInline):
+    model = Choice
+    extra = 3
+
+class QuestionAdmin(admin.ModelAdmin):
+    fieldsets = [
+        (None,               {'fields': ['title', 'author', 'rank', 'score','question_text']}),
+        ('Date information', {'fields': ['publish'], 'classes': ['collapse']}),
+    ]
+    inlines = [ChoiceInline]
+
+admin.site.register(Question, QuestionAdmin)
+
+class PollVoteAdmin(admin.ModelAdmin): pass
+admin.site.register(PollVote, PollVoteAdmin)
 
 admin.site.register(Comment)
 

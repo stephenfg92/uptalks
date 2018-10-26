@@ -1,0 +1,71 @@
+{% extends "blog/base.html" %}
+{% load bootstrap4 %}
+
+
+
+{% block title %}{{ post.title }}{% endblock %}
+
+{% block content %}
+
+    <style>
+      #id_honeypot {
+        display: none;
+      }
+      #upvote {
+        z-index:1;
+        position: relative;
+        padding-right:10;
+      }
+      .fas {
+        color: black;
+      }
+    </style>
+    <div class='container-fluid mt-3 ml-2'>
+        <div class='row'>
+            <div class='col-auto-shrink no-gutters pt-3'>
+                <span 
+                    class="vote-btn" 
+                    data-href='{{post.get_api_vote_url}}' 
+                    data-votes="{{ post.score }}"> 
+                    <h5><i class="far fa-arrow-alt-circle-up" {% if voted == True %} style="color:#ff4619" {% else %} style="color:#adadad" {% endif %}></i> </h5>
+                </span>
+            </div>
+            <div class="col no-gutters pl-2">
+                <h4>{{ post.title }}</h4>
+                <small><p class="text-muted"><span class="num">{{ post.score }}</span> votos | publicado por {% if post.status == 'anonym' %} Anônimo {% else %} {{ post.author.userprofile }} {% endif %} há {{ post.age }} | {{ post.comments.count }} comentários</p></small>
+            </div>
+        </div>
+        <div class=row>
+            <div class="col pl-4">
+        <p class='text-justify'>{{ post.body|linebreaks }}</p>
+        {% if post.author == user %}
+            <a href="{% url 'blog:post_update' slug=post.slug %}">editar</a> |
+            <a href="{% url 'blog:post_delete' slug=post.slug %}">excluir</a>
+        {% endif %}
+            </div>
+        </div>
+
+        <div class="row">
+
+        <div class="col p-4">
+            {% for form in forms %}
+                    <form method="POST">
+                        {% csrf_token %}
+                        {% bootstrap_form form size='small' %}
+                        <input type="hidden" name="selected_form" value="{{ forloop.counter0 }}">
+                        <button type="submit" class="save btn btn-primary btn-sm">Comentar</button>
+                    </form>
+            {% endfor %}
+        </div>
+        </div>
+        <div class="row">
+        <div class="col p-4">
+                {% for comment in post.comments_s.all %}
+                    <small class="text-muted">{{ comment.author_s }}, há {{comment.age}} </small>
+                    {{ comment.text_s|linebreaks }}
+                {% empty %}
+                    <p>Niguém comentou esta publicação :(</p>
+                {% endfor %}
+        </div>
+        </div>
+{% endblock %}

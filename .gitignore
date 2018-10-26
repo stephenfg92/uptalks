@@ -111,3 +111,4 @@ venv.bak/
 
 #Sensitive Info.
 mysite/settings_secret.py
+mysite/changelog.txt

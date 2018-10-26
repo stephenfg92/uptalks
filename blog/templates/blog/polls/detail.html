@@ -1,0 +1,59 @@
+{% extends "blog/base.html" %}
+{% load bootstrap4 %}
+
+{% block content %}
+
+<div class='container-fluid mt-3 ml-2'>
+
+        <div class='row'>
+        <div class="col-auto-shrink no-gutters mr-0 pt-2">
+        <span 
+        class="vote-btn pl-1">
+            <i class="fas fa-star" style="color:#00c91a"></i>
+        </span>
+        </div>
+            <div class="col no-gutters pl-2">
+            <h4>{{ question.title }}</h4>
+                <small><p class="text-muted"><span class="num">{{ question.score }}</span> votos | publicado por {{ question.author.userprofile }} há {{ question.age }} | comentários desabilitados</p></small>
+            </div>
+        </div>
+
+            <div class=row>
+                <div class="col pl-4">
+                    <p class='text-justify'>{{ question.question_text |linebreaks }}</p>
+                </div>
+            </div>
+
+            <div class=row>
+                <div class="col pl-4">
+                    <a class="small" href="{% url 'blog:poll_results' question.pk %}">Clique aqui para acompanhar os resultados da votação</a>
+                </div>
+            </div>
+        <div class="row">
+
+        <div class="col p-4">
+            <form action="{% url 'blog:poll_vote' question.id %}" method="post">
+            {% for choice in question.choice_set.all %}
+        	<div class="input-group mb-3">
+        		<div class="input-group-prepend">
+        			<div class="input-group-text">
+						{% csrf_token %}
+						    <input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}">
+						    <label for="choice{{ forloop.counter }}"></label><br>
+					</div>
+                            <div class="card" style="width:18rem">
+                                <div class="card-body">Opção {{forloop.counter}}: {{ choice.choice_text }}</div>
+                            </div>
+				</div>
+			</div>
+            {% endfor %}
+            {% if error_message %}
+            <div class="alert alert-danger" style="width:20.4rem" role="alert">
+                {{ error_message }}
+            </div>
+            {% endif %}
+            <input type="submit" class="btn btn-success btn-sm" value="Submeter voto">
+            </form>
+        </div>
+        </div>
+{% endblock %}

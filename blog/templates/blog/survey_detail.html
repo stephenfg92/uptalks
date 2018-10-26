@@ -1,0 +1,59 @@
+{% extends "blog/base.html" %}
+{% load bootstrap4 %}
+
+
+
+{% block title %}{{ survey.title }}{% endblock %}
+
+{% block content %}
+
+    <style>
+      #id_honeypot {
+        display: none;
+      }
+      #upvote {
+        z-index:1;
+        position: relative;
+        padding-right:10;
+      }
+      .fas {
+        color: black;
+      }
+    </style>
+    <div class='container-fluid mt-3 ml-2'>
+        <div class='row'>
+            <div class='col-auto-shrink no-gutters pt-3'>
+                <span 
+                    class="vote-btn" 
+                    data-href='{{survey.get_api_vote_url}}' 
+                    data-votes="{{ survey.score }}"> 
+                    <h5><i class="far fa-arrow-alt-circle-up" {% if voted == True %} style="color:#ff4619" {% else %} style="color:#adadad" {% endif %}></i> </h5>
+                </span>
+            </div>
+            <div class="col no-gutters pl-2">
+                <h4>{{ survey.title }}</h4>
+                <small><p class="text-muted"><span class="num">{{ survey.score }}</span> votos | publicado por Stephen Freitas Guarda há {{ survey.age }}</p></small>
+            </div>
+        </div>
+        <div class=row>
+            <div class="col pl-4">
+        <p class='text-justify'>{{ survey.body|linebreaks }}</p>
+        {% if survey.author == user %}
+            <a href="{% url 'blog:post_update' slug=survey.slug %}">editar</a> |
+            <a href="{% url 'blog:post_delete' slug=survey.slug %}">excluir</a>
+        {% endif %}
+            </div>
+        </div>
+
+        <div class="row">
+
+        <div class="col p-4">
+                    <form method="POST">
+                        {% csrf_token %}
+                        {# bootstrap_form form size='small' #}
+                        {{ form }}
+                        <button type="submit" class="save btn btn-primary btn-sm">Comentar</button>
+                    </form>
+        </div>
+        </div>
+{% endblock %}
