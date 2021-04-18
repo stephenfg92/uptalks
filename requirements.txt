@@ -7,7 +7,7 @@ django-icons==0.2.1
 django-progressive-web-app==0.1.1
 django-registration==3.0
 django-updown==1.1.0
-djangorestframework==3.8.2
+djangorestframework==3.11.2
 psycopg2==2.7.5
 pytz==2018.5
 six==1.11.0
